@@ -10,10 +10,12 @@ angular
 	[7,8,9]
 	];
 	
+	//get position on clicked button
 	this.boxItem=boxItem;
 	function boxItem(row,col){
 		
-		console.log(t3box[row][col]);
+		console.log(row + "," + col);
+		console.log(this.t3box[row][col]);
 	}
 
 
