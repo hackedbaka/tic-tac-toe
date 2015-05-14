@@ -16,34 +16,113 @@
 
 </head>
 
-<body ng-controller="t3Controller">
+<body ng-controller="t3Controller" class="{{bg}}">
 	<div class="container">
 
-	<div class="filler"></div>
+	<div class="filler">
+	
+		<select name="Choose a background" ng-model="bg">
+				<option value="">Choose a background...</option>
+				<option value="desert">desert</option>
+				<option value="mex">mex</option>
+				<option value="gym">gym</option>
+				<option value="japon">japon</option>
+				<option value="pigs">pigs</option>
+				<option value="port">port</option>
+				<option value="spiral">spiral</option>
+				<option value="tpark">theme park</option>
+				<option value="wfall">waterfall</option>	
+		</select>
+		<select name="Choose an icon" ng-model="p1pic">
+				<option value="">Choose a pic...</option>
+				<option value="0">cat</option>
+				<option value="1">color</option>
+				<option value="2">cloud</option>
+				<option value="3">finn</option>
+				<option value="4">pbnj</option>
+				<option value="5">kirby</option>
+				<option value="6">black mage</option>
+				<option value="7">dancing cat</option>
+				<option value="8">cow</option>
+			</select>
+			<select name="Choose an icon" ng-model="p2pic">
+				<option value="">Choose a pic...</option>
+				<option value="0">cat</option>
+				<option value="1">color</option>
+				<option value="2">cloud</option>
+				<option value="3">finn</option>
+				<option value="4">pbnj</option>
+				<option value="5">kirby</option>
+				<option value="6">black mage</option>
+				<option value="7">dancing cat</option>
+				<option value="8">cow</option>
+			</select>
+			<!-- <select name="Choose an icon" ng-model="clearpic">
+				<option value="">Choose a pic...</option>
+				<option value="0">cat</option>
+				<option value="1">color</option>
+				<option value="2">cloud</option>
+				<option value="3">finn</option>
+				<option value="4">pbnj</option>
+				<option value="5">kirby</option>
+				<option value="6">black mage</option>
+				<option value="7">dancing cat</option>
+				<option value="8">cow</option>
+			</select> -->
+			
+
+			<button type="button" ng-click="clearAll()">new game</button>
+			<button type="button" ng-click="clearWin()">clear wins</button>
+
+			<div id="display"></div>
+	</div>
 	<div class="box1">
 		<p>P1 SCORE</p>
-		<img src="image/{{p1}}">
-		<p1>{{player1Wins}}</p1>
+		<img ng-src="image/{{getIcon(p1pic)}}">
+		<p1 id="p1win"></p1>
 	</div>
 
 	<div class="box2">
 		<table align="center">
-
-        	<tr ng-repeat="row in t3box">
-        		<td ng-repeat="col in row track by $index" ng-click="changeBox($parent.$index,$index)">
-          			<img ng-src="image/{{col}}">
-          
+        	<tr>
+        		<td ng-click="changeBox(0)">
+          			<img ng-src="image/{{getImg(0)}}">
+          		</td>
+        		<td ng-click="changeBox(1)">
+          			<img ng-src="image/{{getImg(1)}}">
+          		</td>
+        		<td ng-click="changeBox(2)">
+          			<img ng-src="image/{{getImg(2)}}">
+          		</td>
+        	</tr>
+        	<tr>
+        		<td ng-click="changeBox(3)">
+          			<img ng-src="image/{{getImg(3)}}">
+          		</td>
+        		<td ng-click="changeBox(4)">
+          			<img ng-src="image/{{getImg(4)}}">
+          		</td>
+        		<td ng-click="changeBox(5)">
+          			<img ng-src="image/{{getImg(5)}}">
+          		</td>
+        	</tr>
+        	<tr>
+        		<td ng-click="changeBox(6)">
+          			<img ng-src="image/{{getImg(6)}}">
+          		</td>
+        		<td ng-click="changeBox(7)">
+          			<img ng-src="image/{{getImg(7)}}">
+          		</td>
+        		<td ng-click="changeBox(8)">
+          			<img ng-src="image/{{getImg(8)}}">
           		</td>
         	</tr>
 		</table>
-
-		<button class="button" ng-click="clearBox()">clear~</button>
-		<span id="text"></span>
 	</div>
 	<div class="box3">
 		<p>P2 SCORE</p>
-		<p1>{{player2Wins}}</p1>
-		<img src="image/{{p2}}">
+		<img ng-src="image/{{getIcon(p2pic)}}">
+		<p1 id="p2win"></p1>
 	</div>
 
 	</div>

@@ -1,0 +1,9 @@
+{
+  "firebase": "t3firebase",
+  "public": ".",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**"
+  ]
+}

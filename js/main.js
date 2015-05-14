@@ -1,3 +1,3 @@
 angular
-	.module('myApp', []);
+	.module('myApp', ['firebase']);
 

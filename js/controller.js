@@ -1,136 +1,148 @@
 angular
-	.module("myApp")
-	.controller("t3Controller", t3Controller);
+	.module('myApp')
+	.controller('t3Controller',t3Controller);
 
-	
-	function t3Controller($scope){
-    
+t3Controller.$inject = ['$scope','$firebaseObject','$firebaseArray'];
 
-	//contains pics for choice to use
-	$scope.pics=[
-		"cat.gif",
-		"color.gif",
-		"cloud.gif",
-		"finn.gif",
-		"pbnj.gif",
-		"kirby.gif",
-		"bmage.gif",
-		"dcat.gif",
-		"cow.gif"
-	];
 
-	//array for t3space
-	$scope.t3box = [
-	[$scope.pics[0],$scope.pics[1],$scope.pics[2]],
-	[$scope.pics[3],$scope.pics[4],$scope.pics[5]],
-	[$scope.pics[6],$scope.pics[7],$scope.pics[8]]
-	];
-	
+function t3Controller($scope, $firebaseObject, $firebaseArray){
 
-	$scope.playTurn=0;
-	$scope.player1Wins=0;
-	$scope.player2Wins=0;
 
-	//players and clear pic
-	$scope.p1=$scope.pics[0];
-	$scope.p2=$scope.pics[3];
-	$scope.clearPic=$scope.pics[4];
+		// var boxRef = new Firebase("https://t3firebase.firebaseio.com/t3boxes");
+		var rootRef = new Firebase("https://t3firebase.firebaseio.com/");
 
-	
-	//get position on clicked button(testing)
-	// $scope.boxItem=
-	// function(row,col){
+		//sync with top level
+		$firebaseObject(rootRef).$bindTo($scope, "game");
+    	
+		//variables for player turn
+    	var player1=1;
+    	var player2=-1;
+		var currentPlayer =1;
+		var drawCount=0;
+		// var winFlag=false;
+		//variables for chosen images
+		$scope.p1pic=0;
+		$scope.p2pic=1;
 		
-	// 	console.log(row + "," + col);
-	// 	console.log($scope.t3box[row][col]);
-	// }
 
-	//change current box to "XO"(testing)
-	//
-	
-	$scope.changeBox = function(row,col){
-		if($scope.playTurn==0)
-		{
-			if($scope.t3box[row][col]==$scope.clearPic)
+		document.getElementById('p1win').innerHTML = $scope.game.player1Win;
+		document.getElementById('p2win').innerHTML = $scope.game.player2Win;
+		
+
+
+		
+		//switch turns to get picture
+		$scope.changeBox = function(square){
+
+			if($scope.game.t3boxes[square]==0)
 			{
-				$scope.t3box[row][col]=$scope.p1;
-				$scope.playTurn=1;
-				$scope.checkWin();
+				if(currentPlayer == player1)
+					document.getElementById('display').innerHTML = "Player 1 Turn To Play";
+				else if(currentPlayer == player2)
+					document.getElementById('display').innerHTML = "Player 2 Turn To Play";
+				// else
+				// 	document.getElementById('display').innerHTML = "Tie game";
+
+				$scope.game.t3boxes[square] = currentPlayer;
+				$scope.getImg(square);
+				currentPlayer *= -1;
+				$scope.checkWinner();
+				drawCount +=1;
+				if(drawCount>=9)
+				{
+
+					document.getElementById('display').innerHTML = "Tie game";
+					currentPlayer =0;
+				}
+
 			}
 			else
-			{
-				document.getElementById("text").innerHTML = "space filled by " + $scope.t3box[row][col];
-			}
-		}
-		else{
-			if($scope.t3box[row][col]==$scope.clearPic)
-			{
-				$scope.t3box[row][col]=$scope.p2;
-				$scope.playTurn=0;
-				$scope.checkWin()
-			}
-			else
-			{
-				document.getElementById("text").innerHTML = "space filled by " + $scope.t3box[row][col];
-			}
-		}
-	}
-	$scope.clearBox=function(){
-		for(var i=0;i<3;i++)
-			for(var j=0;j<3;j++)
-				$scope.t3box[i][j]=$scope.clearPic;
-		document.getElementById("text").innerHTML = "";
-
-	}
-	//brute force checking for win
-	$scope.checkWin=function(){
+				document.getElementById('display').innerHTML = "Space Already Taken";
 		
-		//check for diagonal P1			
-		if($scope.t3box[0][0]== $scope.p1 && $scope.t3box[1][1] ==$scope.p1 && $scope.t3box[2][2] ==$scope.p1)
-			document.getElementById("text").innerHTML = "Weiner: P1";
+		};
 
-		else if($scope.t3box[0][2]== $scope.p1 && $scope.t3box[1][1] ==$scope.p1 && $scope.t3box[2][0] ==$scope.p1)
-			document.getElementById("text").innerHTML = "Weiner: P1";
+		//get the picture value
+		$scope.getImg = function(square) {
+			if($scope.game.t3boxes[square]==1)
+				return $scope.game.pics[$scope.p1pic];
+			else if($scope.game.t3boxes[square]==-1)
+				return $scope.game.pics[$scope.p2pic];
+			else
+				return $scope.game.pics[square];
+		};//end of getImg
 
-		// check for horizontal P1
-		else if($scope.t3box[0][0]== $scope.p1 && $scope.t3box[0][1] ==$scope.p1 && $scope.t3box[0][2] ==$scope.p1)
-			document.getElementById("text").innerHTML = "Weiner: P1";
-		else if($scope.t3box[1][0]== $scope.p1 && $scope.t3box[1][1] ==$scope.p1 && $scope.t3box[1][2] ==$scope.p1)
-			document.getElementById("text").innerHTML = "Weiner: P1";
-		else if($scope.t3box[2][0]== $scope.p1 && $scope.t3box[2][1] ==$scope.p1 && $scope.t3box[2][2] ==$scope.p1)
-			document.getElementById("text").innerHTML = "Weiner: P1";
+		//get the player icon
+		$scope.getIcon = function(square){
+			return $scope.game.pics[square];
+		};//end of getIcon
 
-		// check for vertical P1
-		else if($scope.t3box[0][0]== $scope.p1 && $scope.t3box[1][0] ==$scope.p1 && $scope.t3box[2][0] ==$scope.p1)
-			document.getElementById("text").innerHTML = "Weiner: P1";
-		else if($scope.t3box[0][1]== $scope.p1 && $scope.t3box[1][1] ==$scope.p1 && $scope.t3box[2][1] ==$scope.p1)
-			document.getElementById("text").innerHTML = "Weiner: P1";
-		else if($scope.t3box[0][2]== $scope.p1 && $scope.t3box[1][2] ==$scope.p1 && $scope.t3box[2][2] ==$scope.p1)
-			document.getElementById("text").innerHTML = "Weiner: P1";
+		//reset board values to 0
+		$scope.clearAll = function(){
+			for(var i=0; i< $scope.game.t3boxes.length; i++)
+				$scope.game.t3boxes[i] = 0;
 
-		//check for diagonal P2
-		if($scope.t3box[0][0]== $scope.p2 && $scope.t3box[1][1] ==$scope.p2 && $scope.t3box[2][2] ==$scope.p2)
-			document.getElementById("text").innerHTML = "Weiner: P2";
+			drawCount=0;
+			
+			//random player start
+			var randomNumber = Math.random();
+			if (randomNumber <= 0.5) {
+        		document.getElementById('display').innerHTML = "Player 1 Turn To Play";
+        		currentPlayer = 1;
+    		} 
+    		else
+    		{
+    			document.getElementById('display').innerHTML = "Player 2 Turn To Play";
+        		currentPlayer = -1;
+    		}
 
-		else if($scope.t3box[0][2]== $scope.p2 && $scope.t3box[1][1] ==$scope.p2 && $scope.t3box[2][0] ==$scope.p2)
-			document.getElementById("text").innerHTML = "Weiner: P2";
+		};//end of clearAll
 
-		// check for horizontal P2
-		else if($scope.t3box[0][0]== $scope.p2 && $scope.t3box[0][1] ==$scope.p2 && $scope.t3box[0][2] ==$scope.p2)
-			document.getElementById("text").innerHTML = "Weiner: P2";
-		else if($scope.t3box[1][0]== $scope.p2 && $scope.t3box[1][1] ==$scope.p2 && $scope.t3box[1][2] ==$scope.p2)
-			document.getElementById("text").innerHTML = "Weiner: P2";
-		else if($scope.t3box[2][0]== $scope.p2 && $scope.t3box[2][1] ==$scope.p2 && $scope.t3box[2][2] ==$scope.p2)
-			document.getElementById("text").innerHTML = "Weiner: P2";
+		//clear wins
+		$scope.clearWin = function(){
+			$scope.game.player1Win = 0;
+			$scope.game.player2Win = 0;
+			document.getElementById('p1win').innerHTML = $scope.game.player1Win;
+			document.getElementById('p2win').innerHTML = $scope.game.player2Win;
 
-		// check for vertical P2
-		else if($scope.t3box[0][0]== $scope.p2 && $scope.t3box[1][0] ==$scope.p2 && $scope.t3box[2][0] ==$scope.p2)
-			document.getElementById("text").innerHTML = "Weiner: P2";
-		else if($scope.t3box[0][1]== $scope.p2 && $scope.t3box[1][1] ==$scope.p2 && $scope.t3box[2][1] ==$scope.p2)
-			document.getElementById("text").innerHTML = "Weiner: P2";
-		else if($scope.t3box[0][2]== $scope.p2 && $scope.t3box[1][2] ==$scope.p2 && $scope.t3box[2][2] ==$scope.p2)
-			document.getElementById("text").innerHTML = "Weiner: P2";
-	}
+		};//end of clearWin
+
+		//check if there is winner
+		$scope.checkWinner = function(){
+			//diagonal check
+			var sumd1=$scope.game.t3boxes[0]+$scope.game.t3boxes[4]+$scope.game.t3boxes[8];
+			var sumd2=$scope.game.t3boxes[2]+$scope.game.t3boxes[4]+$scope.game.t3boxes[6];
+			//horizontal check
+			var sumh1=$scope.game.t3boxes[0]+$scope.game.t3boxes[1]+$scope.game.t3boxes[2];
+			var sumh2=$scope.game.t3boxes[3]+$scope.game.t3boxes[4]+$scope.game.t3boxes[5];
+			var sumh3=$scope.game.t3boxes[6]+$scope.game.t3boxes[7]+$scope.game.t3boxes[8];
+			//vertical check
+			var sumv1=$scope.game.t3boxes[0]+$scope.game.t3boxes[3]+$scope.game.t3boxes[6];
+			var sumv2=$scope.game.t3boxes[1]+$scope.game.t3boxes[4]+$scope.game.t3boxes[7];
+			var sumv3=$scope.game.t3boxes[2]+$scope.game.t3boxes[5]+$scope.game.t3boxes[8];
+			if(sumd1 == 3 || sumd2 == 3 || sumh1 == 3 || sumh2 ==3 || sumh3 ==3 || sumv1 ==3 || sumv2 ==3 || sumv3 ==3)
+			{
+				document.getElementById('display').innerHTML = "Player 1 Wins";
+				$scope.game.player1Win += 1;
+				document.getElementById('p1win').innerHTML = $scope.game.player1Win;
+				currentPlayer=0;
+				// winFlag=true;
+				for(var i=0; i< $scope.game.t3boxes.length; i++)
+				$scope.game.t3boxes[i] = 1;
+
+			}
+			else if(sumd1 == -3 || sumd2 == -3 || sumh1 == -3 || sumh2 == -3 || sumh3 == -3 || sumv1 == -3 || sumv2 == -3 || sumv3 == -3)
+
+			{
+				document.getElementById('display').innerHTML = "Player 2 Wins";
+				$scope.game.player2Win += 1;
+				document.getElementById('p2win').innerHTML = $scope.game.player2Win;
+				currentPlayer=0;
+				// winFlag=true;
+				for(var i=0; i< $scope.game.t3boxes.length; i++)
+				$scope.game.t3boxes[i] = -1;
+			}
+			
+		};//end of checkWinner
 
 
 }//end of t3Controller

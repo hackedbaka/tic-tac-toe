@@ -24,20 +24,75 @@ table{
 
 .filler{
 	height:200px;
+	border: 1px solid white;
+	margin: 0 auto;
+	text-align: center;
 }
 
 body{
 	
+	background-image: url(../image/mex.gif);
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;	
+}
+
+.desert {
+	background-image: url(../image/desert.gif);
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
+.mex {
+	background-image: url(../image/mex.gif);
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
+.gym{
 	background-image: url(../image/gym.gif);
 	background-position: center;
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
-	
-	
+}
+.japon {
+	background-image: url(../image/japon.gif);
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
+.tpark {
+	background-image: url(../image/tpark.gif);
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
+.wfall {
+	background-image: url(../image/waterfall.gif);
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
 }
 
+.port {
+	background-image: url(../image/port.gif);
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
+
+.spiral {
+	background-image: url(../image/spiral.jpg);
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
 html{
 	min-height: 100%;
+}
+
+#display{
+	color: white;
 }
 
 .box1, .box3{
@@ -65,6 +120,7 @@ html{
 	margin: 0 10px;
 	border: 1px solid white;
 	vertical-align: top;
+	display: block;
 
 }
 .box1 img, .box3 img{
