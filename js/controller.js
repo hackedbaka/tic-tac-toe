@@ -8,7 +8,6 @@ t3Controller.$inject = ['$scope','$firebaseObject','$firebaseArray'];
 function t3Controller($scope, $firebaseObject, $firebaseArray){
 
 
-		// var boxRef = new Firebase("https://t3firebase.firebaseio.com/t3boxes");
 		var rootRef = new Firebase("https://t3firebase.firebaseio.com/");
 
 		//sync with top level
@@ -17,18 +16,13 @@ function t3Controller($scope, $firebaseObject, $firebaseArray){
 		//variables for player turn
     	var player1=1;
     	var player2=-1;
-		var currentPlayer =1;
+		var currentPlayer;
 		var drawCount=0;
 		// var winFlag=false;
 		//variables for chosen images
 		$scope.p1pic=0;
 		$scope.p2pic=1;
 		
-
-		document.getElementById('p1win').innerHTML = $scope.game.player1Win;
-		document.getElementById('p2win').innerHTML = $scope.game.player2Win;
-		
-
 
 		
 		//switch turns to get picture
@@ -37,9 +31,9 @@ function t3Controller($scope, $firebaseObject, $firebaseArray){
 			if($scope.game.t3boxes[square]==0)
 			{
 				if(currentPlayer == player1)
-					document.getElementById('display').innerHTML = "Player 1 Turn To Play";
-				else if(currentPlayer == player2)
 					document.getElementById('display').innerHTML = "Player 2 Turn To Play";
+				else if(currentPlayer == player2)
+					document.getElementById('display').innerHTML = "Player 1 Turn To Play";
 				// else
 				// 	document.getElementById('display').innerHTML = "Tie game";
 
