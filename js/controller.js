@@ -18,14 +18,15 @@ function t3Controller($scope, $firebaseObject, $firebaseArray){
     	var player2=-1;
 		var currentPlayer;
 		var drawCount=0;
-		// var winFlag=false;
+		var htpFlag=false;
 		//variables for chosen images
 		$scope.p1pic=0;
 		$scope.p2pic=1;
+		$scope.clearpic=2;
 		
 
 		
-		//switch turns to get picture
+		//switch turns to allow play of game
 		$scope.changeBox = function(square){
 
 			if($scope.game.t3boxes[square]==0)
@@ -34,9 +35,7 @@ function t3Controller($scope, $firebaseObject, $firebaseArray){
 					document.getElementById('display').innerHTML = "Player 2 Turn To Play";
 				else if(currentPlayer == player2)
 					document.getElementById('display').innerHTML = "Player 1 Turn To Play";
-				// else
-				// 	document.getElementById('display').innerHTML = "Tie game";
-
+				
 				$scope.game.t3boxes[square] = currentPlayer;
 				$scope.getImg(square);
 				currentPlayer *= -1;
@@ -62,7 +61,7 @@ function t3Controller($scope, $firebaseObject, $firebaseArray){
 			else if($scope.game.t3boxes[square]==-1)
 				return $scope.game.pics[$scope.p2pic];
 			else
-				return $scope.game.pics[square];
+				return $scope.game.pics[$scope.clearpic];
 		};//end of getImg
 
 		//get the player icon
@@ -137,6 +136,19 @@ function t3Controller($scope, $firebaseObject, $firebaseArray){
 			}
 			
 		};//end of checkWinner
+
+		$scope.showDiv=function() {
+			if(htpFlag == false){
+   				document.getElementById('htp').style.display = "block";
+   				htpFlag=true;
+   			}
+   			else if(htpFlag ==true)
+   			{
+   				document.getElementById('htp').style.display = "none";
+   				htpFlag=false;
+   			}
+
+		}
 
 
 }//end of t3Controller

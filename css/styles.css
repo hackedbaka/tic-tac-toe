@@ -24,10 +24,17 @@ table{
 
 .filler{
 	height:200px;
-	border: 1px solid white;
+	/*border: 1px solid white;*/
 	margin: 0 auto;
 	text-align: center;
 }
+
+#htp{
+	display:none;
+	color: white;
+	background: rgba(255,255,255,0.5); 
+}
+
 
 body{
 	
@@ -94,6 +101,7 @@ html{
 
 #display{
 	color: white;
+	font-size: 30px;
 }
 
 .box1, .box3{
@@ -126,7 +134,7 @@ html{
 }
 .box1 img, .box3 img{
 	
-	margin: 0 10px;
+	margin: 10px 10px;
 	border: 1px solid white;
 	vertical-align: top;
 
