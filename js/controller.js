@@ -2,28 +2,27 @@ angular
 	.module('myApp')
 	.controller('t3Controller',t3Controller);
 
+//inject $scope and $firebaseObject for use in function
 t3Controller.$inject = ['$scope','$firebaseObject'];
 
 
 function t3Controller($scope, $firebaseObject){
 
-		
+		//references my firebase database for use 
 		var rootRef = new Firebase("https://t3firebase.firebaseio.com/");
 
-		//sync with top level
+		//sync with top level of firebase database and automatically save changes
+		//with through use of $scope. Top object name is "game"
 		$firebaseObject(rootRef).$bindTo($scope, "game");
     	
-		//set icons
+		//set icons so no bad image loading would occur with blank 
 		$scope.p1pic=0;
 		$scope.p2pic=1;
 		$scope.clearpic=2;
+		//create a local variable flag for instruction div to appear
 		var htpFlag=false;
-
 		
-		
-
-		
-		//switch turns to allow play of game
+		//new game function that handles turn switching and checking the winner. Does nothing if there is a winner
 		$scope.changeBox = function(square){
 			if ($scope.game.winner) return;
 			if($scope.game.t3boxes[square]==0)
@@ -38,10 +37,9 @@ function t3Controller($scope, $firebaseObject){
 			{
 				$scope.takenMsg = "Space Already Taken";
 			}
-			
-		};
+		};//end of changeBox function
 
-		//get the picture value
+		//get the picture value for the box. Will go out of function if database has not loaded
 		$scope.getImg = function(square) {
 			if (!$scope.game) { return; }
 			if($scope.game.t3boxes[square]==1)
@@ -52,33 +50,27 @@ function t3Controller($scope, $firebaseObject){
 				return $scope.game.pics[$scope.clearpic];
 		};//end of getImg
 
-		//get the player icon
+		//get the player icon. Will go out of function if database has not loaded
 		$scope.getIcon = function(square){
 			if (!$scope.game) { return; }
 			return $scope.game.pics[square];
 		};//end of getIcon
 
-		//reset board values to 0
+		//rstarts a new game. Set board values and game winner to 0. Chooses random starting player
 		$scope.clearAll = function(){
-			// $scope.game.t3boxes = [0,0,0,0,0,0,0,0,0];
 			for(var i=0;i<$scope.game.t3boxes.length;i++) $scope.game.t3boxes[i] =0;
 			$scope.game.winner = 0;
-			
-			//random player start
 			var randomNumber = Math.random();
 			$scope.game.playerTurn = ( randomNumber <= 0.5 ) ? 1 : -1;
 		};//end of clearAll
 
-		//clear wins and set display of player score
+		//clear wins 
 		$scope.clearWin = function(){
 			$scope.game.player1Win = 0;
 			$scope.game.player2Win = 0;
-
-
 		};//end of clearWin
 
-		//check if there is winner, if there is a winner - set all boxes to winner's icon
-		//and display who is the winner
+		//check if there is winner, brute force method for all available wins
 		$scope.checkWinner = function(){
 			//diagonal check
 			var sumd1=$scope.game.t3boxes[0]+$scope.game.t3boxes[4]+$scope.game.t3boxes[8];
@@ -101,8 +93,7 @@ function t3Controller($scope, $firebaseObject){
 			{
 				$scope.game.winner = -1;
 				$scope.game.player2Win += 1;
-			}
-			
+			}	
 		};//end of checkWinner
 
 		//displays and disappears the instruction div
@@ -116,9 +107,8 @@ function t3Controller($scope, $firebaseObject){
    				document.getElementById('htp').style.display = "none";
    				htpFlag=false;
    			}
-
 		};//end of showDiv
-
+		//check if all spaces are empty. Will go out of function if database has not loaded
 		$scope.isEmpty = function(){
 			if (!$scope.game) return;
 			for(var k=0;k<$scope.game.t3boxes.length;k++) {

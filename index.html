@@ -15,11 +15,13 @@
 	
 
 </head>
-
+<!--controller added to body. body background will change according to dropdown menu -->
 <body ng-controller="t3Controller" class="{{bg}}">
+	<!-- div to allow horizontal centering of everything inside-->
 	<div class="container">
-
+	<!-- div to top stuff -->
 	<div class="filler">
+		<!-- creates a dropdown menu to choose background -->
 		<select name="Choose a background" ng-model="bg">
 				<option value="">BACKGROUND</option>
 				<option value="desert">desert</option>
@@ -32,6 +34,7 @@
 				<option value="tpark">theme park</option>
 				<option value="wfall">waterfall</option>	
 		</select>
+		<!-- creates a dropdown menu to choose player 1 icon -->
 		<select name="Choose an P1 icon" ng-model="p1pic">
 				<option value="">P1 ICON</option>
 				<option value="0">cat</option>
@@ -44,63 +47,61 @@
 				<option value="7">dancing cat</option>
 				<option value="8">cow</option>
 			</select>
-			<select name="Choose an P2 icon" ng-model="p2pic">
-				<option value="">P2 ICON</option>
-				<option value="0">cat</option>
-				<option value="1">color</option>
-				<option value="2">cloud</option>
-				<option value="3">finn</option>
-				<option value="4">pbnj</option>
-				<option value="5">kirby</option>
-				<option value="6">black mage</option>
-				<option value="7">dancing cat</option>
-				<option value="8">cow</option>
-			</select>
-			<select name="Choose an clear icon" ng-model="clearpic">
-				<option value="">CLEAR ICON</option>
-				<option value="0">cat</option>
-				<option value="1">color</option>
-				<option value="2">cloud</option>
-				<option value="3">finn</option>
-				<option value="4">pbnj</option>
-				<option value="5">kirby</option>
-				<option value="6">black mage</option>
-				<option value="7">dancing cat</option>
-				<option value="8">cow</option>
-			</select>
-			
-
-			<button type="button" ng-click="clearAll()">new game</button>
-			<button type="button" ng-click="clearWin()">clear wins</button>
-			<button type="button" ng-click="showDiv()">How To Play</button>
-
-			<div class="display" ng-show="game.playerTurn==1 && isEmpty() && !game.winner">Player 1 Turn</div>
-			<div class="display" ng-show="game.playerTurn==-1 && isEmpty() && !game.winner">Player 2 Turn</div>
-			<div class="display" ng-show=" !isEmpty() && !game.winner">It's a Tie</div>
-			<div class="display">{{takenMsg}}</div>
-			<div class="display" ng-show="game.winner == 1">Player 1 Wins</div>
-			<div class="display" ng-show="game.winner == -1">Player 2 Wins</div>
-			<div class="display" ng-show="game.winner == 1 || game.winner ==- 1">Click New Game To Play Again</div>
-	
-
-
-			
-			<div id="htp">
+			<!-- creates a dropdown menu to choose player 2 icon -->
+		<select name="Choose an P2 icon" ng-model="p2pic">
+			<option value="">P2 ICON</option>
+			<option value="0">cat</option>
+			<option value="1">color</option>
+			<option value="2">cloud</option>
+			<option value="3">finn</option>
+			<option value="4">pbnj</option>
+			<option value="5">kirby</option>
+			<option value="6">black mage</option>
+			<option value="7">dancing cat</option>
+			<option value="8">cow</option>
+		</select>
+		<!-- creates a dropdown menu to choose clear icon -->
+		<select name="Choose an clear icon" ng-model="clearpic">
+			<option value="">CLEAR ICON</option>
+			<option value="0">cat</option>
+			<option value="1">color</option>
+			<option value="2">cloud</option>
+			<option value="3">finn</option>
+			<option value="4">pbnj</option>
+			<option value="5">kirby</option>
+			<option value="6">black mage</option>
+			<option value="7">dancing cat</option>
+			<option value="8">cow</option>
+		</select>
+		<!-- buttons for new game, clear wind and instructions to play	 -->
+		<button type="button" ng-click="clearAll()">new game</button>
+		<button type="button" ng-click="clearWin()">clear wins</button>
+		<button type="button" ng-click="showDiv()">How To Play</button>
+		<!-- divs that display if the value is true -->
+		<div class="display" ng-show="game.playerTurn==1 && isEmpty() && !game.winner">Player 1 Turn</div>
+		<div class="display" ng-show="game.playerTurn==-1 && isEmpty() && !game.winner">Player 2 Turn</div>
+		<div class="display" ng-show=" !isEmpty() && !game.winner">It's a Tie</div>
+		<div class="display">{{takenMsg}}</div>
+		<div class="display" ng-show="game.winner == 1">Player 1 Wins</div>
+		<div class="display" ng-show="game.winner == -1">Player 2 Wins</div>
+		<div class="display" ng-show="game.winner == 1 || game.winner ==- 1">Click New Game To Play Again</div>
+		<!-- text for instructions -->
+		<div id="htp">
 				<ul>
 					<p>Drop down menus allow you to change the background, and icons for playing</p>
-					<p>Icons are currently set as pics 1,2, and 3</p>
-					<p>Start a new game by clicking on the new game button. Clear Wins will need to be clicked to display beginning wins or if reseting wins.</p>
-					<p>Objective of this game: Get three in a row with your icon in the 3x3 grid. Who plays first will be randomly chosen. If no one wins, Tie game will be displayed. Click on new game to start another game.</p>
+					<p>Start a new game by clicking on the new game button. Clear Wins will reset wins to zero.</p>
+					<p>Objective of this game: Get three in a row with your icon in the 3x3 grid. Who plays first will be randomly chosen.<br> If no one wins, Tie game will be displayed. Click on new game to start another game.</p>
 
 				</ul>
-			</div>
+		</div>
 	</div>
+	<!-- div containing player 1 wins and icon. css changes depending on player turn-->
 	<div class="box1" ng-class="{'turn': game.playerTurn===1}">
 		<p>P1 SCORE</p>
 		<img ng-src="image/{{getIcon(p1pic)}}">
 		<p1 id="p1win">{{game.player1Win}}</p1>
 	</div>
-
+	<!-- div containing gameboard for tic tac toe. Each box contains a click function and a image display. Uses angular to get name of the picture -->
 	<div class="box2">
 		<table align="center">
         	<tr>
@@ -138,6 +139,7 @@
         	</tr>
 		</table>
 	</div>
+	<!-- div containing player 2 wins and icon. css changes depending on player turn-->
 	<div class="box3" ng-class="{'turn': game.playerTurn===-1}">
 		<p>P2 SCORE</p>
 		<img ng-src="image/{{getIcon(p2pic)}}">

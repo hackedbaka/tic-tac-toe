@@ -27,12 +27,15 @@ table{
 	/*border: 1px solid white;*/
 	margin: 0 auto;
 	text-align: center;
+	background-color: rgba(255,255,255,.5);
+	padding: 20px 0;
+
 }
 
 #htp{
 	display:none;
-	color: white;
-	background: rgba(255,255,255,0.5); 
+	color: teal;
+
 }
 
 
@@ -113,7 +116,9 @@ html{
 
 .box1, .box3{
 	width: 200px;
-	height: 200px;
+	height: 250px;
+	background-color: rgba(255,255,255,.5);
+
 }
 
 .box1, .box2, .box3{
@@ -132,17 +137,14 @@ html{
 
 
 .box1 p1, .box3 p1{
-	font-size: 40px;
-	margin: 0 10px;
-	border: 1px solid white;
-	
+	font-size: 50px;
 	display: block;
 
 }
 .box1 img, .box3 img{
-	
-	margin: 10px 10px;
-	border: 1px solid white;
+	width:50px;
+	height:50px;
+	margin: 20px 10px;
 	vertical-align: top;
 
 }
