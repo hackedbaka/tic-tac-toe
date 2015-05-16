@@ -38,7 +38,7 @@ table{
 
 body{
 	
-	background-image: url(../image/mex.gif);
+	background-image: url(../image/desert.gif);
 	background-position: center;
 	background-size: 100% 100%;
 	background-repeat: no-repeat;	
@@ -88,6 +88,13 @@ body{
 	background-repeat: no-repeat;
 }
 
+.pigs{
+	background-image: url(../image/pigs.gif);
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
+
 .spiral {
 	background-image: url(../image/spiral.jpg);
 	background-position: center;
@@ -99,7 +106,7 @@ html{
 	min-width: 1000px;
 }
 
-#display{
+.display{
 	color: white;
 	font-size: 30px;
 }
@@ -138,4 +145,8 @@ html{
 	border: 1px solid white;
 	vertical-align: top;
 
+}
+
+.turn {
+	border: 4px solid red;
 }

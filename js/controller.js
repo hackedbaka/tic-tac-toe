@@ -2,60 +2,48 @@ angular
 	.module('myApp')
 	.controller('t3Controller',t3Controller);
 
-t3Controller.$inject = ['$scope','$firebaseObject','$firebaseArray'];
+t3Controller.$inject = ['$scope','$firebaseObject'];
 
 
-function t3Controller($scope, $firebaseObject, $firebaseArray){
+function t3Controller($scope, $firebaseObject){
 
-
+		
 		var rootRef = new Firebase("https://t3firebase.firebaseio.com/");
 
 		//sync with top level
 		$firebaseObject(rootRef).$bindTo($scope, "game");
     	
-		//variables for player turn
-    	var player1=1;
-    	var player2=-1;
-		var currentPlayer;
-		var drawCount=0;
-		var htpFlag=false;
-		//variables for chosen images
+		//set icons
 		$scope.p1pic=0;
 		$scope.p2pic=1;
 		$scope.clearpic=2;
+		var htpFlag=false;
+
+		
 		
 
 		
 		//switch turns to allow play of game
 		$scope.changeBox = function(square){
-
+			if ($scope.game.winner) return;
 			if($scope.game.t3boxes[square]==0)
-			{
-				if(currentPlayer == player1)
-					document.getElementById('display').innerHTML = "Player 2 Turn To Play";
-				else if(currentPlayer == player2)
-					document.getElementById('display').innerHTML = "Player 1 Turn To Play";
-				
-				$scope.game.t3boxes[square] = currentPlayer;
-				$scope.getImg(square);
-				currentPlayer *= -1;
+			{				
+				$scope.takenMsg = "";
+				$scope.game.t3boxes[square] = $scope.game.playerTurn;
+				// $scope.getImg(square);
+				$scope.game.playerTurn *= -1;
 				$scope.checkWinner();
-				drawCount +=1;
-				if(drawCount>=9)
-				{
-
-					document.getElementById('display').innerHTML = "Tie game";
-					currentPlayer =0;
-				}
-
-			}
+			} 
 			else
-				document.getElementById('display').innerHTML = "Space Already Taken";
-		
+			{
+				$scope.takenMsg = "Space Already Taken";
+			}
+			
 		};
 
 		//get the picture value
 		$scope.getImg = function(square) {
+			if (!$scope.game) { return; }
 			if($scope.game.t3boxes[square]==1)
 				return $scope.game.pics[$scope.p1pic];
 			else if($scope.game.t3boxes[square]==-1)
@@ -66,40 +54,31 @@ function t3Controller($scope, $firebaseObject, $firebaseArray){
 
 		//get the player icon
 		$scope.getIcon = function(square){
+			if (!$scope.game) { return; }
 			return $scope.game.pics[square];
 		};//end of getIcon
 
 		//reset board values to 0
 		$scope.clearAll = function(){
-			for(var i=0; i< $scope.game.t3boxes.length; i++)
-				$scope.game.t3boxes[i] = 0;
-
-			drawCount=0;
+			// $scope.game.t3boxes = [0,0,0,0,0,0,0,0,0];
+			for(var i=0;i<$scope.game.t3boxes.length;i++) $scope.game.t3boxes[i] =0;
+			$scope.game.winner = 0;
 			
 			//random player start
 			var randomNumber = Math.random();
-			if (randomNumber <= 0.5) {
-        		document.getElementById('display').innerHTML = "Player 1 Turn To Play";
-        		currentPlayer = 1;
-    		} 
-    		else
-    		{
-    			document.getElementById('display').innerHTML = "Player 2 Turn To Play";
-        		currentPlayer = -1;
-    		}
-
+			$scope.game.playerTurn = ( randomNumber <= 0.5 ) ? 1 : -1;
 		};//end of clearAll
 
-		//clear wins
+		//clear wins and set display of player score
 		$scope.clearWin = function(){
 			$scope.game.player1Win = 0;
 			$scope.game.player2Win = 0;
-			document.getElementById('p1win').innerHTML = $scope.game.player1Win;
-			document.getElementById('p2win').innerHTML = $scope.game.player2Win;
+
 
 		};//end of clearWin
 
-		//check if there is winner
+		//check if there is winner, if there is a winner - set all boxes to winner's icon
+		//and display who is the winner
 		$scope.checkWinner = function(){
 			//diagonal check
 			var sumd1=$scope.game.t3boxes[0]+$scope.game.t3boxes[4]+$scope.game.t3boxes[8];
@@ -114,29 +93,19 @@ function t3Controller($scope, $firebaseObject, $firebaseArray){
 			var sumv3=$scope.game.t3boxes[2]+$scope.game.t3boxes[5]+$scope.game.t3boxes[8];
 			if(sumd1 == 3 || sumd2 == 3 || sumh1 == 3 || sumh2 ==3 || sumh3 ==3 || sumv1 ==3 || sumv2 ==3 || sumv3 ==3)
 			{
-				document.getElementById('display').innerHTML = "Player 1 Wins";
+				$scope.game.winner = 1;
 				$scope.game.player1Win += 1;
-				document.getElementById('p1win').innerHTML = $scope.game.player1Win;
-				currentPlayer=0;
-				// winFlag=true;
-				for(var i=0; i< $scope.game.t3boxes.length; i++)
-				$scope.game.t3boxes[i] = 1;
-
 			}
 			else if(sumd1 == -3 || sumd2 == -3 || sumh1 == -3 || sumh2 == -3 || sumh3 == -3 || sumv1 == -3 || sumv2 == -3 || sumv3 == -3)
 
 			{
-				document.getElementById('display').innerHTML = "Player 2 Wins";
+				$scope.game.winner = -1;
 				$scope.game.player2Win += 1;
-				document.getElementById('p2win').innerHTML = $scope.game.player2Win;
-				currentPlayer=0;
-				// winFlag=true;
-				for(var i=0; i< $scope.game.t3boxes.length; i++)
-				$scope.game.t3boxes[i] = -1;
 			}
 			
 		};//end of checkWinner
 
+		//displays and disappears the instruction div
 		$scope.showDiv=function() {
 			if(htpFlag == false){
    				document.getElementById('htp').style.display = "block";
@@ -148,6 +117,16 @@ function t3Controller($scope, $firebaseObject, $firebaseArray){
    				htpFlag=false;
    			}
 
+		};//end of showDiv
+
+		$scope.isEmpty = function(){
+			if (!$scope.game) return;
+			for(var k=0;k<$scope.game.t3boxes.length;k++) {
+				if ($scope.game.t3boxes[k] === 0) {
+					return true;
+				}
+			}
+			return false;
 		}
 
 
