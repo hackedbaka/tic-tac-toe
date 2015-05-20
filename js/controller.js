@@ -11,7 +11,7 @@ function t3Controller($scope, $firebaseObject){
 		//references my firebase database for use 
 		var rootRef = new Firebase("https://t3firebase.firebaseio.com/");
 
-		//sync with top level of firebase database and automatically save changes
+		//sync with top level of firebase database and automatically save changes by bindTo
 		//with through use of $scope. Top object name is "game"
 		$firebaseObject(rootRef).$bindTo($scope, "game");
     	
@@ -22,24 +22,29 @@ function t3Controller($scope, $firebaseObject){
 		//create a local variable flag for instruction div to appear
 		var htpFlag=false;
 		
-		//new game function that handles turn switching and checking the winner. Does nothing if there is a winner
+		//new game function that handles turn switching and checking the winner. 
+		// Does nothing if there is a winner
 		$scope.changeBox = function(square){
 			if ($scope.game.winner) return;
+			if($scope.game.playerTurn != player) return;
 			if($scope.game.t3boxes[square]==0)
-			{				
+			{	
+				//html display message is blank			
 				$scope.takenMsg = "";
 				$scope.game.t3boxes[square] = $scope.game.playerTurn;
-				// $scope.getImg(square);
+				//switch to other player
 				$scope.game.playerTurn *= -1;
 				$scope.checkWinner();
 			} 
 			else
 			{
+				//html appears when someone tries to click a taken space
 				$scope.takenMsg = "Space Already Taken";
 			}
 		};//end of changeBox function
 
-		//get the picture value for the box. Will go out of function if database has not loaded
+		//get the picture value for the box. 
+		//Will go out of function if database has not loaded
 		$scope.getImg = function(square) {
 			if (!$scope.game) { return; }
 			if($scope.game.t3boxes[square]==1)
@@ -50,13 +55,15 @@ function t3Controller($scope, $firebaseObject){
 				return $scope.game.pics[$scope.clearpic];
 		};//end of getImg
 
-		//get the player icon. Will go out of function if database has not loaded
+		//get the player icon. 
+		//Will go out of function if database has not loaded
 		$scope.getIcon = function(square){
 			if (!$scope.game) { return; }
 			return $scope.game.pics[square];
 		};//end of getIcon
 
-		//rstarts a new game. Set board values and game winner to 0. Chooses random starting player
+		//rstarts a new game. Set board values and game winner to 0. 
+		//Chooses random starting player
 		$scope.clearAll = function(){
 			for(var i=0;i<$scope.game.t3boxes.length;i++) $scope.game.t3boxes[i] =0;
 			$scope.game.winner = 0;
@@ -117,7 +124,27 @@ function t3Controller($scope, $firebaseObject){
 				}
 			}
 			return false;
-		}
+		}//end of isEmpty
+
+		//testing for single computer lockout
+		var player;
+		$scope.connect = function(){
+    		if ($scope.game.p1Connect === false) {
+      			$scope.game.p1Connect = true;     
+      			player = 1;
+    		} 
+    		else if ($scope.game.p2Connect === false) {
+      			$scope.game.p2Connect=true;
+      			player = -1;
+    		}
+    	}
+
+    	$scope.disconnect = function(){
+    		$scope.game.p1Connect = false; 
+    		$scope.game.p2Connect = false; 
+    		player=undefined;
+    	}
+
 
 
 }//end of t3Controller

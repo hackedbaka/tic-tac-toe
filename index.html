@@ -77,6 +77,9 @@
 		<button type="button" ng-click="clearAll()">new game</button>
 		<button type="button" ng-click="clearWin()">clear wins</button>
 		<button type="button" ng-click="showDiv()">How To Play</button>
+		<!-- test divs -->
+		<button type="button" ng-click="connect()">Lock As Player</button>
+		<button type="button" ng-click="disconnect()">Unlock </button>
 		<!-- divs that display if the value is true -->
 		<div class="display" ng-show="game.playerTurn==1 && isEmpty() && !game.winner">Player 1 Turn</div>
 		<div class="display" ng-show="game.playerTurn==-1 && isEmpty() && !game.winner">Player 2 Turn</div>
